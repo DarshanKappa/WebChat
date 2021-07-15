@@ -1,0 +1,357 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <script src="{% static 'jquery-3.6.0.min.js' %}"></script>
+</head>
+
+<body style="font-family:'Arial Narrow', Arial, sans-serif">
+    <style>
+        ::-webkit-scrollbar {
+            width: 1vw;
+          }
+  
+        ::-webkit-scrollbar-track {
+            background: #dbdbdb; 
+          }
+        ::-webkit-scrollbar-thumb {
+            background: #888; 
+            border-radius: 100vw;
+         
+          }
+        ::-webkit-scrollbar-thumb:hover {
+            background: #555; 
+          
+          }
+        #name {
+            background-color: rgb(118, 70, 163);
+            padding: 3vw;
+            color: white;
+        }
+
+        #chatbox {}
+
+        #chat {
+            height: 65vh;
+            border: 2px solid rebeccapurple;
+            padding: 3vw 2vw;
+            overflow-y: auto;
+            background: url("{% static 'back2.webp' %}");
+            background-repeat: no-repeat;
+            background-position: center;
+            background-size: cover;
+        }
+
+        #send {}
+
+        #input {
+            border: .5vw solid rgb(118, 70, 163);
+            height: 4vw;
+            outline: none;
+            font-size: 2.8vw;
+            padding: 1.5vw 2vw;
+            width: 73.5vw;
+            margin-right: 0vw;
+
+        }
+
+        #sendbtn {
+            background-color: rgb(104, 55, 150);
+            color: white;
+            border: none;
+            height: 8vw;
+            font-size: 3vw;
+            width: 15vw;
+            margin-left: 0vw;
+        }
+
+        .chatmessages {
+            color: black;
+            margin: 3vw 0vw;
+            display: block;
+            width: 65vw;
+            font-size: 2.8vw;
+        }
+        .sendchat{
+            background-color: rgb(236, 236, 236);
+            display: inline-block;
+            padding: 1vw 2vw;
+            border-radius: .8vw;
+            box-shadow: 0vw 0vw 0.3vw 0vw #8d8d8d;
+        }
+        .recivechat{
+            background-color: rgb(152, 255, 124);
+            display: inline-block;
+            padding: 1vw 2vw;
+            position: sticky;
+            left: 100vw;
+            border-radius: .8vw;
+            box-shadow: 0vw 0vw 0.3vw 0vw #777777;
+            
+        }
+        .time{
+            font-size: 2.1vw;
+            color: rgb(58, 58, 58);
+            display: block;
+            text-align: right;
+            padding-left: 2vw;
+            padding-top: 1vw;
+        }
+        .chatdate{
+            border-radius: .5vw;
+            display: block;
+            /* border: 2px solid red; */
+            background-color: #ebe8e8;
+            padding: .5vw 2vw;
+            font-size: 2.5vw;
+            width: 16vw;
+            margin: auto;
+            box-shadow: 0vw 0vw 0.3vw 0vw #757575;
+            text-align: center;        }
+    </style>
+
+    <h3>Hello, {{user.first_name}}</h3>
+
+    <div id="name">
+        <span>{{user1.first_name}}</span><span style="margin-left: 70vw;">{{user2.first_name}}</span>
+    </div>
+
+    <div id="chatbox">
+        <div id="chat">
+
+        </div>
+        <div id="send">
+
+            <input type="text" id="input" autocomplete="off" name="input" autofocus placeholder="Send Message">
+            <input id="sendbtn" type="submit" value="Send">
+
+        </div>
+    </div>
+
+
+
+</body>
+
+
+
+<script>
+    let jsondata = 0
+    let lastmessage = 1
+    let lastyear = 2000
+    let lastmonth = 1
+    let lastdate = 1
+    let lasthour = 1
+    let lastminute = 1
+    let lastsecond = 1
+    //$('#chat').append(document.createElement('span').innerHTML = `<span class=chatmessages>Hii Darshan</span>`)
+    //$('#chat').append(document.createElement('span').innerHTML = `<span class=chatmessages>How r u</span>`)
+    runchat()
+    function runchat(){
+    $('#chat').empty()
+    $.ajax({
+        type: 'GET',
+        url: "{% url 'allchat' %}",
+        data: {
+            'chat_id1': {{ chatlist1.id }}, 
+            'chat_id2': {{ chatlist2.id }}, 
+            'lastmessage': lastmessage, 
+            'lastyear':lastyear,
+            'lastmonth':lastmonth,
+            'lastdate':lastdate,
+            'lasthour':lasthour,
+            'lastminute':lastminute,
+            'lastsecond':lastsecond
+        },
+        success: function (json) {
+            
+
+     
+            for (i in json.chat,json.date,json.time){
+                
+
+                if (json.time[i] == 'date'){
+                    $('#chat').append(document.createElement('span').innerHTML = `<span class="chatdate">`+ json.date[i] +`</span>`) 
+                }else{
+              
+                if (json.chat_id[i] == {{ chatlist2.id }}){
+                    $('#chat').append(document.createElement('span').innerHTML = `<span class=chatmessages><span class="sendchat">`+ json.chat[i] + `<span class="time">`+ json.time[i] +`</span></span></span>`) 
+                }
+                if (json.chat_id[i] == {{ chatlist1.id }}){
+                 
+                    $('#chat').append(document.createElement('span').innerHTML = `<span style="padding-left:24vw" class=chatmessages><span class="recivechat">`+ json.chat[i] + `<span class="time">`+ json.time[i] +`</span></span></span>`) 
+                }    
+                }
+                
+                
+            }
+            
+            let element = document.getElementById("chat");
+            element.scrollTop = element.scrollHeight;
+    
+            
+        
+     
+            lastmessage = 0
+            lastyear = json.lastyear
+            lastmonth = json.lastmonth
+            lastdate = json.lastdate
+            lasthour = json.lasthour
+            lastminute = json.lastminute
+            lastsecond = json.lastsecond
+            console.log(lastmessage)
+            console.log(lastyear)
+            console.log(lastmonth)
+            console.log(lastdate)
+            console.log(lasthour)
+            console.log(lastminute)
+            console.log(lastsecond)
+    
+            //setTimeout(runchat,5000)
+            setTimeout(refreshchat,10000)
+        
+                  
+        }
+        
+    })
+}
+
+</script>
+<script>
+    function refreshchat(){
+        $.ajax({
+            type: 'GET',
+            url: '{% url 'refreshchat' %}',
+            data: {
+                'chat_id1': {{ chatlist1.id }}, 
+                'chat_id2': {{ chatlist2.id }}, 
+                'lastmessage': lastmessage, 
+                'lastyear':lastyear,
+                'lastmonth':lastmonth,
+                'lastdate':lastdate,
+                'lasthour':lasthour,
+                'lastminute':lastminute,
+                'lastsecond':lastsecond
+            },
+            success: function(json){
+
+                if (json.oldnew == "new"){
+
+                    for (i in json.chat,json.date,json.time){
+                
+                        if (json.time[i] == 'date'){
+                            $('#chat').append(document.createElement('span').innerHTML = `<span class="chatdate">`+ json.date[i] +`</span>`) 
+                        }else{
+                      
+                        if (json.chat_id[i] == {{ chatlist2.id }}){
+                            $('#chat').append(document.createElement('span').innerHTML = `<span class=chatmessages><span class="sendchat">`+ json.chat[i] + `<span class="time">`+ json.time[i] +`</span></span></span>`) 
+                        }
+                        if (json.chat_id[i] == {{ chatlist1.id }}){
+                         
+                            $('#chat').append(document.createElement('span').innerHTML = `<span style="padding-left:24vw" class=chatmessages><span class="recivechat">`+ json.chat[i] + `<span class="time">`+ json.time[i] +`</span></span></span>`) 
+                        }    
+                        }
+                        
+                        
+                    }
+                    
+                    let element = document.getElementById("chat");
+                    element.scrollTop = element.scrollHeight;
+            
+                    
+                
+             
+                }
+                lastmessage = 0
+                lastyear = json.lastyear
+                lastmonth = json.lastmonth
+                lastdate = json.lastdate
+                lasthour = json.lasthour
+                lastminute = json.lastminute
+                lastsecond = json.lastsecond
+                console.log(lastmessage)
+                console.log(lastyear)
+                console.log(lastmonth)
+                console.log(lastdate)
+                console.log(lasthour)
+                console.log(lastminute)
+                console.log(lastsecond)
+        
+                setTimeout(refreshchat,5000)
+               
+
+            }
+        })
+    }
+</script>
+
+<script>
+
+    $('#sendbtn').click(function () {
+        console.log($('#input').val())
+        let l = $('#input').val()
+
+        $('#input').val('')
+        $('#input').focus()
+
+        $.ajax({
+            type: 'GET',
+            url: "{% url 'sendmessage' %}",
+            data: {
+                'message': l, 'chat_id1': {{ chatlist1.id }}, 'chat_id2': {{ chatlist2.id }} 
+            },
+        success: function (json) {
+
+
+
+            //runchat()
+
+        }
+            
+        })
+
+    })
+    /*  document.getElementById('input').addEventListener("keyup", function(event) {
+          // Number 13 is the "Enter" key on the keyboard
+          if (event.keyCode === 13) {
+            // Cancel the default action, if needed
+            event.preventDefault();
+            // Trigger the button element with a click
+            document.getElementById("sendbtn").click();
+          }
+        });
+        */
+    $('#input').keyup(function (e) {
+        let l = $('#input').val()
+        if (e.keyCode === 13) {
+            if (l.length > 0) {
+                for (i = 0; i < l.length; i++) {
+                    if (l[i] != ' ') {
+                        $('#sendbtn').click()
+                        break
+                    }
+                }
+            }
+        }
+
+    })
+
+</script>
+<script>
+    $('::-webkit-scrollbar-thumb').hover(function(){
+        console.log('hover')
+    })
+</script>
+
+
+<script>
+    
+
+    
+</script>
+
+</html>

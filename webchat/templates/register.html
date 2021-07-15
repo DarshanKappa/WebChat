@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<style>
+    .box {}
+</style>
+
+<body style="padding: 5vw;">
+<h1>Hello, {{user.first_name}}</h1>
+    <div class="box">
+        <h2 class='register' >Register</h3>
+            <form action="." method="POST">
+                {% csrf_token %}
+                <input type="text" name="first_name" placeholder="First Name"><br><br>
+                <input type="text" name="last_name" placeholder="Last Name"><br><br>
+
+                <input type="number" name="number" id="" placeholder="Number"><br><br>
+                <input type="password" name="password1" id="" placeholder="Password"><br><br>
+                <input type="password" name="password2" id="" placeholder="Confirm Password"><br><br>
+                <input type="submit" value="Register">
+            </form>
+    </div>
+        <div>
+            {% for message in messages %}
+            <h5 style=color:red>Error: {{message}}</h5>
+            {% endfor %}
+        </div>
+
+        <script >
+        document.querySelector('.register').textContent = 'Sign Up!';
+
+        </script>
+</body>
+
+</html>

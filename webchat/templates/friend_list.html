@@ -1,0 +1,245 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Friend List</title>
+    
+
+</head>
+
+<body style="font-family: Arial, Helvetica, sans-serif;">
+    <style>
+        .s-btn {
+            border: none;
+            background: #6c6cff;
+            color: white;
+            width: 14vw;
+            height: 5vw;
+            font-size: 2.5vw;
+            border-radius: .6vw;
+        }
+
+        #s-input {
+            height: 2.4vw;
+            padding: 1vw;
+            font-size: 2.6vw;
+            color: gray;
+            margin: 2vw;
+        }
+
+        #friend {
+            border: .3vw solid #d1d1d1;
+            margin: 2vw;
+            padding: 1vw;
+            font-size: 2.8vw;
+            overflow: auto;
+            border-radius: .3vw
+        }
+        #sent_request{
+            border: .3vw solid #d1d1d1;
+            margin: 2vw;
+            padding: 1vw;
+            font-size: 2.8vw;
+            overflow: auto;
+            border-radius: .3vw
+            
+        }
+        .friend_request{
+            border: .3vw solid #d1d1d1;
+            margin: 2vw;
+            padding: 1vw;
+            font-size: 2.8vw;
+            overflow: auto;
+            border-radius: .3vw
+
+        }
+
+        #req {
+            background-color: rgb(6, 148, 25);
+        }
+        .reject{
+            border: none;
+            color: white;
+            width: 14vw;
+            height: 5vw;
+            font-size: 2.5vw;
+            border-radius: .6vw;
+            background-color: rgb(206, 31, 31);
+        }
+        .accept {
+            border: none;
+            color: white;
+            width: 14vw;
+            height: 5vw;
+            font-size: 2.5vw;
+            border-radius: .6vw;
+            background-color: rgb(6, 148, 25);
+        }
+        #cancel{
+            background-color: rgb(185, 185, 185);
+        }
+        .message{
+            border: none;
+            width: 14vw;
+            height: 5vw;
+            font-size: 2.5vw;
+            border-radius: .6vw;
+            background-color: rgb(36, 129, 129);
+            color: white;
+        }
+        #name {
+            width: 69vw;
+            display: inline-block;
+            color: rgb(100, 100, 100);
+            padding-left: 5vw;
+        }
+    </style>
+    <h2 style="text-align: center;">Friend List</h2>
+    <h3>Hello, {{user.first_name}}</h3>
+    <form action="." method="POST">
+        {% csrf_token %}
+        <input id="s-input" type="number" name="friend" placeholder="Search Friend">
+        <input class="s-btn" type="submit" value="Search">
+    </form>
+
+    <div>
+        {% for message in messages %}
+        <h5 style=color:red;>Error: {{message}}</h5>
+        {% endfor %}
+    </div>
+
+    <div id="friend">
+        <span id="name">{{friend.first_name}} {{friend.last_name}}
+            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;{{friend.username}}</span>
+        <button id="req" class="s-btn">Request</button>
+    </div>
+
+
+    <h3>Friend Request</h2>
+    {% for i in friend_request %}
+    <div class="friend_request">
+        <span style="width: 54.3vw;" class="name" id="name">{{i.first_name}} {{i.last_name}}
+            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="fusername">{{i.username}}</span></span>
+        <button class="reject">Reject</button>
+        <button class="accept">Accept</button>
+    </div>
+    {% endfor %}
+
+
+    <h3>Sent Request</h2>
+    {% for i in sent_request %}
+    <div id="sent_request">
+        <span id="name">{{i.first_name}} {{i.last_name}}
+            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;{{i.username}}</span>
+        <button id="cancel" class="s-btn">Cancel</button>
+    </div>
+    {% endfor %}
+
+
+    <h3>Friends</h2>
+    {% for i in friend_list %}
+    <form action="{% url 'chats' %}">
+        <input type="hidden" name="id" value="{{i.id}}">
+    <div class="sendmessage" id="sent_request">
+        <span style="width: 53vw;" class="name" id="name">{{i.first_name}} {{i.last_name}}
+            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="musername">{{i.username}}</span></span>
+        <button type="submit" class="message" >Message</button>
+        <button id="cancel" style="border:.25vw solid rgb(116, 116, 116);background: none;color: Gray;" class="s-btn">Block</button>
+    </div>
+    </form>
+    {% endfor %}
+
+</body>
+<script></script>
+<script>
+    friend = '{{friend.username}}'
+    if(!friend){
+        $('#friend').hide()
+    }
+    $('#req').click(function () {
+        if (document.getElementById('req').innerText == 'Request') {
+
+            
+            console.log('ok')
+            document.getElementById('req').style.backgroundColor = "rgb(207, 207, 207)"
+            document.getElementById('req').innerText = 'Cancel'
+            
+            
+            $.ajax({
+                type: 'GET',
+                url: "{% url 'send_request' %}",
+                data: {
+                    'first_name': '{{friend.first_name}}',
+                    'id': '{{friend.id}}'
+                },
+                success: function (json) {
+                    console.log(json.name)
+                    window.location.reload()
+                }
+            })
+        }
+        else{
+            document.getElementById('req').style.backgroundColor = "rgb(6, 148, 25)"
+            document.getElementById('req').innerText = 'Request'
+
+        }
+
+    })
+</script>
+<script>
+    $('.accept').click(function(){
+        console.log('in')
+        console.log($(this).parents('.friend_request').children('.name').children('.fusername').text())
+        $.ajax({
+            type: 'GET',
+            url: "{% url 'accept_request' %}",
+            data: {
+                'id': $(this).parents('.friend_request').children('.name').children('.fusername').text(),
+                'action': 'accept'
+            },
+            success: function (json) {
+                console.log(json.name)
+                window.location.reload()
+            }
+        })
+    })
+
+    $('.reject').click(function(){
+        console.log('in')
+        console.log($(this).parents('.friend_request').children('.name').children('.fusername').text())
+        $.ajax({
+            type: 'GET',
+            url: "{% url 'accept_request' %}",
+            data: {
+                'id': $(this).parents('.friend_request').children('.name').children('.fusername').text(),
+                'action': 'reject'
+            },
+            success: function (json) {
+                console.log(json.name)
+                window.location.reload()
+            }
+        })
+    })
+</script>
+
+<script>
+/* 
+  $('.message').click(function(){
+   
+        $.ajax({
+            type: 'GET',
+            url: "{% url 'chats' %}",
+            
+            data: {
+                'username': $(this).parents('.sendmessage').children('.name').children('.musername').text()
+            }
+        })
+    })
+*/
+</script>
+
+</html>
