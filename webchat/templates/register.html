@@ -1,30 +1,34 @@
-<!DOCTYPE html>
-<html lang="en">
+{% extends 'home.html' %}
 
-<head>
-    <meta charset="UTF-8">
-    <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Document</title>
-</head>
+{% block content %}
 <style>
-    .box {}
+#registration{
+    padding: 5vw;
+}
 </style>
 
-<body style="padding: 5vw;">
-<h1>Hello, {{user.first_name}}</h1>
+<div id="registration">
     <div class="box">
-        <h2 class='register' >Register</h3>
+        <h2 class='register' >Register</h2>
             <form action="." method="POST">
                 {% csrf_token %}
-                <input type="text" name="first_name" placeholder="First Name"><br><br>
-                <input type="text" name="last_name" placeholder="Last Name"><br><br>
 
-                <input type="number" name="number" id="" placeholder="Number"><br><br>
-                <input type="password" name="password1" id="" placeholder="Password"><br><br>
-                <input type="password" name="password2" id="" placeholder="Confirm Password"><br><br>
-                <input type="submit" value="Register">
-            </form>
+  <div class="mb-3">
+    <label for="exampleInputEmail1" class="form-label">First Name</label>
+    <input type="email" name="first_name" class="form-control" id="exampleInputEmail1" aria-describedby="emailHelp">
+    <label for="exampleInputEmail1" class="form-label">Last Name</label>
+    <input type="email" name="last_name" class="form-control" id="exampleInputEmail1" aria-describedby="emailHelp">
+    <label for="exampleInputEmail1" class="form-label">Mobile No.</label>
+    <input type="email" name="number" class="form-control" id="exampleInputEmail1" aria-describedby="emailHelp">
+
+    <label for="exampleInputPassword1" class="form-label">Password</label>
+    <input type="password" name="password1" class="form-control" id="exampleInputPassword1">
+    <label for="exampleInputPassword1" class="form-label">Comform Password</label>
+    <input type="password" name="password2" class="form-control" id="exampleInputPassword1">
+  </div>
+
+  <button type="submit" class="btn btn-primary">Sing Up</button>
+</form>
     </div>
         <div>
             {% for message in messages %}
@@ -36,6 +40,7 @@
         document.querySelector('.register').textContent = 'Sign Up!';
 
         </script>
-</body>
 
-</html>
+</div>
+
+{% endblock  %}

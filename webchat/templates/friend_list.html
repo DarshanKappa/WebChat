@@ -1,18 +1,11 @@
-{% load static %}
-<!DOCTYPE html>
-<html lang="en">
+{% extends 'home.html' %}
 
-<head>
-    <meta charset="UTF-8">
-    <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Friend List</title>
-    
-
-</head>
-
-<body style="font-family: Arial, Helvetica, sans-serif;">
+{% block content %}
     <style>
+        #searchbox{
+            width: 100%;
+            background-color: #dedede;
+        }
         .s-btn {
             border: none;
             background: #6c6cff;
@@ -23,12 +16,14 @@
             border-radius: .6vw;
         }
 
-        #s-input {
-            height: 2.4vw;
+        #s1-input {
+
+            height: 4.4vw;
             padding: 1vw;
             font-size: 2.6vw;
             color: gray;
             margin: 2vw;
+            width: 80vw;
         }
 
         #friend {
@@ -55,6 +50,17 @@
             font-size: 2.8vw;
             overflow: auto;
             border-radius: .3vw
+
+        }
+        .friendr{
+            margin: 3vw 0vw;
+            background-color: #dedede ;
+        }
+        .friendr span{
+            font-family:  sans-serif;
+            margin-left: 2vw;
+            font-size: 3vw;
+            color: #5c5a56;
 
         }
 
@@ -98,11 +104,9 @@
             padding-left: 5vw;
         }
     </style>
-    <h2 style="text-align: center;">Friend List</h2>
-    <h3>Hello, {{user.first_name}}</h3>
-    <form action="." method="POST">
+    <form id='searchbox' action="." method="POST">
         {% csrf_token %}
-        <input id="s-input" type="number" name="friend" placeholder="Search Friend">
+        <input id="s1-input" type="number" name="friend" placeholder="Search Friend">
         <input class="s-btn" type="submit" value="Search">
     </form>
 
@@ -118,8 +122,8 @@
         <button id="req" class="s-btn">Request</button>
     </div>
 
-
-    <h3>Friend Request</h2>
+<div class="friendr">
+    <span>Friend Request</span>
     {% for i in friend_request %}
     <div class="friend_request">
         <span style="width: 54.3vw;" class="name" id="name">{{i.first_name}} {{i.last_name}}
@@ -128,9 +132,9 @@
         <button class="accept">Accept</button>
     </div>
     {% endfor %}
-
-
-    <h3>Sent Request</h2>
+</div>
+<div class="friendr"><span>Sent Request</span></div>
+   
     {% for i in sent_request %}
     <div id="sent_request">
         <span id="name">{{i.first_name}} {{i.last_name}}
@@ -139,8 +143,8 @@
     </div>
     {% endfor %}
 
+    <div class="friendr"><span>Friends</span></div>
 
-    <h3>Friends</h2>
     {% for i in friend_list %}
     <form action="{% url 'chats' %}">
         <input type="hidden" name="id" value="{{i.id}}">
@@ -153,8 +157,9 @@
     </form>
     {% endfor %}
 
-</body>
-<script></script>
+
+
+
 <script>
     friend = '{{friend.username}}'
     if(!friend){
@@ -242,4 +247,4 @@
 */
 </script>
 
-</html>
+{% endblock  %}

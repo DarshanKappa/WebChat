@@ -1,13 +1,13 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Document</title>
-</head>
-<body style="padding: 5vw;">
-<h1>Hello, {{user.first_name}}</h1>
+{% extends 'home.html' %}
+
+{% block content %}
+<style>
+#login{
+    padding: 5vw;
+}
+</style>
+<div id="login">
+
     <h2>Login</h2>
     <div>
         {% for message in messages %}
@@ -16,10 +16,21 @@
     </div>
 <form action="." method="POST">
     {% csrf_token %}
-    <input type="number" max name="number" id="" placeholder="Number"><br><br>
 
-    <input type="password" name="password" id="" placeholder="Password"><br><br>
-    <input type="submit" value="Login">
+  <div class="mb-3">
+    <label for="exampleInputEmail1" class="form-label">Mobile No.</label>
+    <input type="number" name="number" class="form-control" id="exampleInputEmail1" aria-describedby="emailHelp">
+  </div>
+  <div class="mb-3">
+    <label for="exampleInputPassword1" class="form-label">Password</label>
+    <input type="password" name="password" class="form-control" id="exampleInputPassword1">
+  </div>
+  <div class="mb-3 form-check">
+    <input type="checkbox" class="form-check-input" id="exampleCheck1">
+    <label class="form-check-label" for="exampleCheck1">Check me out</label>
+  </div>
+  <button type="submit" class="btn btn-primary">Login</button>
 </form>
-</body>
-</html>
+
+</div>
+{% endblock %}

@@ -1,1 +1,73 @@
-<h1>Hello, {{user.first_name}}</h1>
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>WebChat</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet"
+        integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC" crossorigin="anonymous">
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.bundle.min.js"
+        integrity="sha384-MrcW6ZMFYlzcLA8Nl+NtUVF0sA7MsXsP1UyJoMp4YLEuNSfAP+JcXn/tWtIaxVXM"
+        crossorigin="anonymous"></script>
+    <script src="{% static 'jquery-3.6.0.min.js' %}"></script>
+    <link rel="icon" href="{% static 'chat.png' %}" type="image/x-icon">
+    <style>
+        body {
+            margin: 0;
+        }
+
+        header {
+            font-size: 3vw;
+            padding: 4vw 5vw 1.5vw 5vw;
+            background-color: rgb(141, 141, 219);
+        }
+
+        nav {
+            margin: 1vw 0vw;
+        }
+
+        nav span {
+            padding: .5vw 1vw;
+            margin: 0vw 1vw;
+        }
+
+        nav span a {
+            text-decoration: none;
+            color: rgb(240, 240, 240);
+        }
+
+        #chat {
+            height: 65vh;
+            border: 2px solid rebeccapurple;
+            padding: 3vw 2vw;
+            overflow-y: auto;
+            background: url("{% static 'back2.webp' %}");
+            background-repeat: no-repeat;
+            background-position: center;
+            background-size: cover;
+        }
+    </style>
+</head>
+
+<body>
+    <header>
+        <div>Hello, {{user.first_name}}</div>
+        <nav>
+
+            <span><a href="/">Home</a></span>
+            <span><a href="/chat/friend_list">Friend List</a></span>
+            <span><a href="/account/login">Login</a></span>
+            <span><a href="/account">Sing Up</a></span>
+
+
+        </nav>
+
+    </header>
+    {% block content %}
+    {% endblock %}
+</body>
+
+</html>

@@ -1,16 +1,6 @@
-{% load static %}
-<!DOCTYPE html>
-<html lang="en">
+{% extends 'home.html' %}
 
-<head>
-    <meta charset="UTF-8">
-    <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Document</title>
-    <script src="{% static 'jquery-3.6.0.min.js' %}"></script>
-</head>
-
-<body style="font-family:'Arial Narrow', Arial, sans-serif">
+{% block content %}
     <style>
         ::-webkit-scrollbar {
             width: 1vw;
@@ -30,33 +20,34 @@
           }
         #name {
             background-color: rgb(118, 70, 163);
-            padding: 3vw;
+            width: 100%;
+            padding: 1vw 3vw;
             color: white;
+            display: flex;
+        }
+        #name div{
+            width: 50%;
+            font-size: 2.5vw;
         }
 
-        #chatbox {}
-
-        #chat {
-            height: 65vh;
-            border: 2px solid rebeccapurple;
-            padding: 3vw 2vw;
-            overflow-y: auto;
-            background: url("{% static 'back2.webp' %}");
-            background-repeat: no-repeat;
-            background-position: center;
-            background-size: cover;
+        #chatbox {
+            height: 100%;
         }
 
-        #send {}
+
+
+        #send {
+            display: flex;
+        }
 
         #input {
             border: .5vw solid rgb(118, 70, 163);
-            height: 4vw;
+            height: 7vw;
             outline: none;
             font-size: 2.8vw;
             padding: 1.5vw 2vw;
-            width: 73.5vw;
-            margin-right: 0vw;
+            width: 99%;
+            margin: 0vw;
 
         }
 
@@ -64,17 +55,20 @@
             background-color: rgb(104, 55, 150);
             color: white;
             border: none;
-            height: 8vw;
+            height: 100%;
             font-size: 3vw;
             width: 15vw;
-            margin-left: 0vw;
+            margin: 0vw;
+        }
+        #int{
+            width: 85%;
         }
 
         .chatmessages {
             color: black;
             margin: 3vw 0vw;
             display: block;
-            width: 65vw;
+            width: 93vw;
             font-size: 2.8vw;
         }
         .sendchat{
@@ -115,10 +109,9 @@
             text-align: center;        }
     </style>
 
-    <h3>Hello, {{user.first_name}}</h3>
 
     <div id="name">
-        <span>{{user1.first_name}}</span><span style="margin-left: 70vw;">{{user2.first_name}}</span>
+        <div>{{user1.first_name}}</div><div style="text-align:right;">{{user2.first_name}}</div>
     </div>
 
     <div id="chatbox">
@@ -127,9 +120,13 @@
         </div>
         <div id="send">
 
-            <input type="text" id="input" autocomplete="off" name="input" autofocus placeholder="Send Message">
-            <input id="sendbtn" type="submit" value="Send">
+            <div id="int">
+            <input type="text" id="input" autocomplete="off" name="input" autofocus placeholder="Send Message">'
+        </div>
 
+        <div id="btn">
+            <input id="sendbtn" type="submit" value="Send">
+        </div>
         </div>
     </div>
 
@@ -140,6 +137,7 @@
 
 
 <script>
+  
     let jsondata = 0
     let lastmessage = 1
     let lastyear = 2000
@@ -179,11 +177,11 @@
                 }else{
               
                 if (json.chat_id[i] == {{ chatlist2.id }}){
-                    $('#chat').append(document.createElement('span').innerHTML = `<span class=chatmessages><span class="sendchat">`+ json.chat[i] + `<span class="time">`+ json.time[i] +`</span></span></span>`) 
+                    $('#chat').append(document.createElement('span').innerHTML = `<span style="padding-right:27vw" class=chatmessages><span class="sendchat">`+ json.chat[i] + `<span class="time">`+ json.time[i] +`</span></span></span>`) 
                 }
                 if (json.chat_id[i] == {{ chatlist1.id }}){
                  
-                    $('#chat').append(document.createElement('span').innerHTML = `<span style="padding-left:24vw" class=chatmessages><span class="recivechat">`+ json.chat[i] + `<span class="time">`+ json.time[i] +`</span></span></span>`) 
+                    $('#chat').append(document.createElement('span').innerHTML = `<span style="padding-left:27vw" class=chatmessages><span class="recivechat">`+ json.chat[i] + `<span class="time">`+ json.time[i] +`</span></span></span>`) 
                 }    
                 }
                 
@@ -354,4 +352,4 @@
     
 </script>
 
-</html>
+{% endblock  %}
